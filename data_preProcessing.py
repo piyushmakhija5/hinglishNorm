@@ -118,7 +118,7 @@ def remove_non_ascii(text):
 
 ################## Driver Function #########################
 
-def preprocess(config,df):
+def preprocessdf):
     if 'text' not in df.columns:
         raise ValueError("text column not present in excel")
     print("Processing ..")
@@ -140,4 +140,12 @@ def preprocess(config,df):
     df = df.sample(frac=1).reset_index(drop=True)
     return df
 
+###################### END ###############################
+
+################## Main Function #########################
+
+if __name__ == "__main__":
+    df  = pd.read_excel('rawTextUtterances.xlsx')
+    df = preprocess(df)
+    df.to_excel("preprocessedUtterances.xlsx", index=False)
 ###################### END ###############################

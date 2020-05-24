@@ -1,16 +1,6 @@
 import numpy as np
 import pandas as pd
-import requests
-from tqdm import tqdm
-import json
-tqdm.pandas()
-import string
-import nltk
 import re
-import pandas
-import unicodedata
-import argparse
-from itertools import groupby
 import enchant
 
 # INDIC-TRANSLITERATION
@@ -58,6 +48,7 @@ def strip_whiteSpaces(text):
     '''
     text = re.sub(r'[\s]+', ' ', text)
     return text
+
 def process_URLs(text):
     '''
     Replace all URLs in the  text
@@ -114,30 +105,31 @@ def remove_non_ascii(text):
     else:
         return text
 
+def remove_empty(df):
+    df['text'].replace('', np.nan, inplace=True)
+    df['text'].replace(r'^\s*$', np.nan, inplace=True)
+    df.dropna(subset=['text'], inplace=True)
+    return df
+
 ################################# END ###################################
 
 ################## Driver Function #########################
 
-def preprocessdf):
+def preprocess(df):
     if 'text' not in df.columns:
         raise ValueError("text column not present in excel")
     print("Processing ..")
     print("Total length : -",len(df))
-    df = remove_duplicates(df)
-    print("Total length(After Removing Duplicates) : -",len(df))
     df['text'] = df['text'].apply(apply_transliteration)
     df['text'] = df['text'].apply(to_lowerCase)
-    df['text'] = df['text'].apply(process_spam)
     df['text'] = df['text'].apply(process_URLs)
     df['text'] = df['text'].apply(filter_alpha_numeric)
     df['text'] = df['text'].apply(remove_non_ascii)
     df['text'] = df['text'].apply(normalize_word)
-    # df['text'] = df['text'].apply(remove_complete_english_utterance)
     df['text'] = df['text'].apply(trim)
     df['text'] = df['text'].apply(strip_whiteSpaces)
-    df = remove_duplicates(df)
     df = remove_empty(df)
-    df = df.sample(frac=1).reset_index(drop=True)
+    df = df.reset_index(drop=True)
     return df
 
 ###################### END ###############################

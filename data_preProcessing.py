@@ -92,20 +92,19 @@ def filter_alpha_numeric(text):
     else:
         return text
 
-def normalize_word(text):
-    if text!=None:
-        text = re.sub(r'(.)\1+', r'\1\1', text)
-        return text
-    else:
-        return text
-
 def remove_non_ascii(text):
+    '''
+    Filter out words which are outside Ascii-128 character range
+    '''
     if text!=None:
         return ''.join(i for i in text if ord(i)<128)
     else:
         return text
 
 def remove_empty(df):
+    '''
+    Remove utterances which have become empty after applying all preprocessing functions
+    '''
     df['text'].replace('', np.nan, inplace=True)
     df['text'].replace(r'^\s*$', np.nan, inplace=True)
     df.dropna(subset=['text'], inplace=True)
@@ -125,7 +124,6 @@ def preprocess(df):
     df['text'] = df['text'].apply(process_URLs)
     df['text'] = df['text'].apply(filter_alpha_numeric)
     df['text'] = df['text'].apply(remove_non_ascii)
-    df['text'] = df['text'].apply(normalize_word)
     df['text'] = df['text'].apply(trim)
     df['text'] = df['text'].apply(strip_whiteSpaces)
     df = remove_empty(df)

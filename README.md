@@ -9,6 +9,6 @@ The object/fields in released JSON format dataset are as shown in Table
 
 | Field  | Description | Example |
 | :----: |:-----------:| :-----: |
-| id     | Unique identifier for each datapoint | $1600 |
+| id     | Unique identifier for each datapoint | 30 |
 | Text   | Filtered & cleaned but unnormalized version of user’s input text | whtas ur name |
 | Annotation | Manually annotated normalized version of Text | what is your name |

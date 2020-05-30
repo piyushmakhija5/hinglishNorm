@@ -92,4 +92,4 @@ def evaluate(filename1, filename2):
 if __name__ == '__main__':
     filename1 = sys.argv[1]
     filename2 = sys.argv[2]
-    print (evaluate(filename1, filename2))
+    print(evaluate(filename1, filename2))

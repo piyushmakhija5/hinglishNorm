@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import re
+import sys
 import enchant
 
 # INDIC-TRANSLITERATION
@@ -87,7 +88,7 @@ def filter_alpha_numeric(text):
     '''
     if text!=None:
         tokens = text.split()
-        clean_tokens = [t for t in tokens if re.match(r'[^\W\d_\']*$', t)]
+        clean_tokens = [t for t in tokens if re.sub(r'[^\w]',' ',t)]
         return ' '.join(clean_tokens)
     else:
         return text
@@ -135,7 +136,10 @@ def preprocess(df, columnName):
 ################## Main Function #########################
 
 if __name__ == "__main__":
-    df  = pd.read_excel('rawTextUtterances.xlsx')
-    df = preprocess(df, columnName)
-    df.to_excel("preprocessedUtterances.xlsx", index=False)
+    data = sys.argv[1]
+    print(data.split('.')[0])
+    df  = pd.read_excel(data)
+    df = preprocess(df, 'text')
+    df = preprocess(df, 'annotation')
+    df.to_excel(data.split('.')[0]+"_preprocessed.xlsx", index=False)
 ###################### END ###############################

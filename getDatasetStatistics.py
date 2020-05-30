@@ -3,67 +3,104 @@
 import numpy as np
 import pandas as pd
 import itertools
+import sys
+import ast
+from collections import Counter
 pd.options.display.float_format = "{:,.2f}".format
 
-df = pd.read_csv('10kAnnotations_processed.csv')
+
+################## Pre-Process Functions #######################
+
+def computeCMI(data, columnName):
+    text = data[columnName]
+    lang = data['transformation']
+    print(lang)
+    # lang = ast.literal_eval(lang)
+    twords = len(text.split(' '))  # total words in a sentences
+    maxWordInAnyLanguage = Counter(lang).most_common(1)[0][1]
+    cmi = round(100*(maxWordInAnyLanguage/twords),2)
+    return cmi
+
+############################ END ###############################
 
 
-############################## Evaluate Statistics #################################
-statList = []
+############################## Evaluate text vs annotation Statistics #################################
+def getComparisonStats(df):
+    statList = []
 
-# Number of Utterances in Dataset
-statList.append(['#Utterances', len(df.processedUtterance), len(df.processedAnnotation)])
+    # Number of Utterances in Dataset
+    statList.append(['#sentences', len(df.text), len(df.annotation)])
 
-# Number of Unique Utterances in Dataset
-statList.append(['#uniqueUtterances', df.processedUtterance.nunique(), df.processedAnnotation.nunique()])
+    # Number of Unique Utterances in Dataset
+    statList.append(['#uniqueSentences', df.text.nunique(), df.annotation.nunique()])
 
-# Number of Unique Words in Dataset
-statList.append(['#uniqueWords', len(set(itertools.chain(*[str.split(x) for x in list(df.processedUtterance)]))), 
-                len(set(itertools.chain(*[str.split(x) for x in list(df.processedAnnotation)])))])
+    # Number of Unique Words in Dataset
+    statList.append(['#uniqueWords', len(set(itertools.chain(*[str.split(x) for x in list(df.text)]))),
+                    len(set(itertools.chain(*[str.split(x) for x in list(df.annotation)])))])
 
-# Number of Unique Characters in Dataset
-utteranceList = list(df.processedUtterance)
-annotatedList = list(df.processedAnnotation)
-statList.append(['#uniqueChars', len(set(itertools.chain(*[list(x) for x in utteranceList]))), 
-                len(set(itertools.chain(*[list(x) for x in annotatedList])))])
+    # Number of Unique Characters in Dataset
+    utteranceList = list(df.text)
+    annotatedList = list(df.annotation)
+    statList.append(['#uniqueChars', len(set(itertools.chain(*[list(x) for x in utteranceList]))),
+                    len(set(itertools.chain(*[list(x) for x in annotatedList])))])
 
-# Most Common Utterance in Dataset
-statList.append(['mostCommonUtterance', df.processedUtterance.value_counts().argmax(), 
-                 df.processedAnnotation.value_counts().argmax()])
+    # Most Common Utterance in Dataset
+    statList.append(['mostCommonSentence', df.text.value_counts().argmax(),
+                    df.annotation.value_counts().argmax()])
 
-# Number of Instances for Most Common Utterances in Dataset
-statList.append(['# instances of mostCommonUtterance', df.processedUtterance.value_counts().max(), 
-                 df.processedAnnotation.value_counts().max()])
+    # Number of Instances for Most Common Utterances in Dataset
+    statList.append(['# instances of mostCommonSentence', df.text.value_counts().max(),
+                    df.annotation.value_counts().max()])
 
-# Mean Character Length of Utterances in Dataset
-statList.append(['meanCharLength', df.processedUtterance.str.len().mean(), df.processedAnnotation.str.len().mean()])
+    # Mean Character Length of Utterances in Dataset
+    statList.append(['meanCharLength', df.text.str.len().mean(), df.annotation.str.len().mean()])
 
-# Standard Deviation of Characters for Utterances in Dataset
-statList.append(['stdCharLength', df.processedUtterance.str.len().std(), df.processedAnnotation.str.len().std()])
+    # Standard Deviation of Characters for Utterances in Dataset
+    statList.append(['stdCharLength', df.text.str.len().std(), df.annotation.str.len().std()])
 
-# Median Character Length of Utterances in Dataset
-statList.append(['medianCharLength', df.processedUtterance.str.len().median(),
-                 df.processedAnnotation.str.len().median()])
+    # Median Character Length of Utterances in Dataset
+    statList.append(['medianCharLength', df.text.str.len().median(),
+                    df.annotation.str.len().median()])
 
-# Mean Word Length of Utterances in Dataset
-statList.append(['meanWordLength', df.processedUtterance.str.split().str.len().mean(), 
-                 df.processedAnnotation.str.split().str.len().mean()])
+    # Mean Word Length of Utterances in Dataset
+    statList.append(['meanWordLength', df.text.str.split().str.len().mean(),
+                    df.annotation.str.split().str.len().mean()])
 
-# Standard Deviation of Words for Utterances in Dataset
-statList.append(['stdWordLength', df.processedUtterance.str.split().str.len().std(), 
-                 df.processedAnnotation.str.split().str.len().std()])
+    # Standard Deviation of Words for Utterances in Dataset
+    statList.append(['stdWordLength', df.text.str.split().str.len().std(),
+                    df.annotation.str.split().str.len().std()])
 
-# Median Character Length of Utterances in Dataset
-statList.append(['medianWordLength', df.processedUtterance.str.split().str.len().median(), 
-                 df.processedAnnotation.str.split().str.len().median()])
+    # Median Character Length of Utterances in Dataset
+    statList.append(['medianWordLength', df.text.str.split().str.len().median(),
+                    df.annotation.str.split().str.len().median()])
+
+
+    # CMI
+    # df['cmi_text'] = computeCMI(df,'text')
+    # df['cmi_annotation'] = computeCMI(df,'annotation')
+    # statList.append(['cmi', df.cmi_text.mean(),df.cmi_annotation.mean()])
+
+    df_stats = pd.DataFrame(data = statList, columns=['feature', 'text', 'annotation'])
+    return df_stats
+
+
+def getBasicStats(df):
+    df.transformation = df.transformation.apply(ast.literal_eval)
+    print(f"Percentage of sentences with Hindi Words: {100.0*df.transformation.apply(lambda row: 'Hindi' in row).mean():0.2f} %")
+    print(f"Percentage of Hindi Words in Corpus: {df.transformation.apply(lambda row: (100.0*row.count('Hindi')/len(row))).mean():0.2f} %")
 
 ####################################### END ########################################
 
 
 ############################## Driver Function #####################################
 
-# Create Dataset for Datset Statistics
-df_stats = pd.DataFrame(data = statList, columns=['feature', 'noisy_utterance', 'annotated_utterance'])
-print(df_stats)
+if __name__ == "__main__":
+    # Read data from command line
+    data = sys.argv[1]
+    df = pd.read_excel(data)
+    # Evaluate Dataset statistics
+    df_stats = getComparisonStats(df)
+    getBasicStats(df)
+    print(df_stats)
 
 ####################################### END #########################################

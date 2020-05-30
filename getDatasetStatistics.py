@@ -11,15 +11,14 @@ pd.options.display.float_format = "{:,.2f}".format
 
 ################## Pre-Process Functions #######################
 
-def computeCMI(data, columnName):
-    text = data[columnName]
-    lang = data['transformation']
-    print(lang)
-    # lang = ast.literal_eval(lang)
-    twords = len(text.split(' '))  # total words in a sentences
-    maxWordInAnyLanguage = Counter(lang).most_common(1)[0][1]
-    cmi = round(100*(maxWordInAnyLanguage/twords),2)
-    return cmi
+# def computeCMI(data, columnName):
+#     text = data[columnName]
+#     lang = data['transformation']
+#     lang = ast.literal_eval(lang)
+#     twords = len(text.split(' '))  # total words in a sentences
+#     maxWordInAnyLanguage = Counter(lang).most_common(1)[0][1]
+#     cmi = round(100*(maxWordInAnyLanguage/twords),2)
+#     return cmi
 
 ############################ END ###############################
 
@@ -74,20 +73,21 @@ def getComparisonStats(df):
     statList.append(['medianWordLength', df.text.str.split().str.len().median(),
                     df.annotation.str.split().str.len().median()])
 
-
-    # CMI
-    # df['cmi_text'] = computeCMI(df,'text')
-    # df['cmi_annotation'] = computeCMI(df,'annotation')
-    # statList.append(['cmi', df.cmi_text.mean(),df.cmi_annotation.mean()])
-
     df_stats = pd.DataFrame(data = statList, columns=['feature', 'text', 'annotation'])
     return df_stats
 
 
 def getBasicStats(df):
     df.transformation = df.transformation.apply(ast.literal_eval)
-    print(f"Percentage of sentences with Hindi Words: {100.0*df.transformation.apply(lambda row: 'Hindi' in row).mean():0.2f} %")
-    print(f"Percentage of Hindi Words in Corpus: {df.transformation.apply(lambda row: (100.0*row.count('Hindi')/len(row))).mean():0.2f} %")
+    print(f"Percentage of sentences where text != annotation: {100.0 * (df.text != df.annotation).mean():0.2f} %")
+    print(f"Percentage of sentences with Hindi Words: {100.0 * df.transformation.apply(lambda row: 'Hindi' in row).mean():0.2f} %")
+    print(f"Percentage of Hindi Words in Corpus: {df.transformation.apply(lambda row: (100.0 * row.count('Hindi')/len(row))).mean():0.2f} %")
+
+    # CMI
+    # df['cmi_text'] = computeCMI(df,'text')
+    # df['cmi_annotation'] = computeCMI(df,'annotation')
+    # statList.append(['cmi', df.cmi_text.mean(),df.cmi_annotation.mean()])
+
 
 ####################################### END ########################################
 

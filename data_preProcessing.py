@@ -101,32 +101,32 @@ def remove_non_ascii(text):
     else:
         return text
 
-def remove_empty(df):
+def remove_empty(df, columnName):
     '''
     Remove utterances which have become empty after applying all preprocessing functions
     '''
-    df['text'].replace('', np.nan, inplace=True)
-    df['text'].replace(r'^\s*$', np.nan, inplace=True)
-    df.dropna(subset=['text'], inplace=True)
+    df[columnName].replace('', np.nan, inplace=True)
+    df[columnName].replace(r'^\s*$', np.nan, inplace=True)
+    df.dropna(subset=[columnName], inplace=True)
     return df
 
 ################################# END ###################################
 
 ################## Driver Function #########################
 
-def preprocess(df):
+def preprocess(df, columnName):
     if 'text' not in df.columns:
         raise ValueError("text column not present in excel")
     print("Processing ..")
     print("Total length : -",len(df))
-    df['text'] = df['text'].apply(apply_transliteration)
-    df['text'] = df['text'].apply(to_lowerCase)
-    df['text'] = df['text'].apply(process_URLs)
-    df['text'] = df['text'].apply(filter_alpha_numeric)
-    df['text'] = df['text'].apply(remove_non_ascii)
-    df['text'] = df['text'].apply(trim)
-    df['text'] = df['text'].apply(strip_whiteSpaces)
-    df = remove_empty(df)
+    df[columnName] = df[columnName].apply(apply_transliteration)
+    df[columnName] = df[columnName].apply(to_lowerCase)
+    df[columnName] = df[columnName].apply(process_URLs)
+    df[columnName] = df[columnName].apply(filter_alpha_numeric)
+    df[columnName] = df[columnName].apply(remove_non_ascii)
+    df[columnName] = df[columnName].apply(trim)
+    df[columnName] = df[columnName].apply(strip_whiteSpaces)
+    df = remove_empty(df, columnName)
     df = df.reset_index(drop=True)
     return df
 
@@ -136,6 +136,6 @@ def preprocess(df):
 
 if __name__ == "__main__":
     df  = pd.read_excel('rawTextUtterances.xlsx')
-    df = preprocess(df)
+    df = preprocess(df, columnName)
     df.to_excel("preprocessedUtterances.xlsx", index=False)
 ###################### END ###############################

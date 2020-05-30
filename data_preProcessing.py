@@ -111,9 +111,9 @@ def remove_empty(df, columnName):
     df.dropna(subset=[columnName], inplace=True)
     return df
 
-################################# END ###################################
+############################ END #################################
 
-################## Driver Function #########################
+######################## Driver Function #########################
 
 def preprocess(df, columnName):
     if 'text' not in df.columns:
@@ -131,13 +131,16 @@ def preprocess(df, columnName):
     df = df.reset_index(drop=True)
     return df
 
-###################### END ###############################
+############################ END ###############################
 
-################## Main Function #########################
+######################## Main Function #########################
 
 if __name__ == "__main__":
+    # Read data from command line
     data = sys.argv[1]
     df  = pd.read_excel(data)
+    # Preprocess Dataset
     df = preprocess(df, 'text')
     df.to_excel(data.split('.')[0]+"_preprocessed.xlsx", index=False)
+
 ###################### END ###############################

@@ -20,8 +20,6 @@ def sentenceBleu(ref, can):
 	df = pd.DataFrame()
 	df['ref'] = pd.Series(reference[0]).astype(str) + '\n'
 	df['can'] = pd.Series(candidate[0]).astype(str) + '\n'
-	
-	#print (df.tail())
 	score = 0.
 	#print (sentence_bleu([["bahar", "hun", "abi", "ok"]], ["baahar", "hun", "abhi", "okay"]))
 	for i in tqdm.tqdm(range(len(reference))):

@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import re
 import sys
+import string
 import enchant
 
 # INDIC-TRANSLITERATION
@@ -88,10 +89,16 @@ def filter_alpha_numeric(text):
     '''
     if text!=None:
         tokens = text.split()
-        clean_tokens = [t for t in tokens if re.sub(r'[^\w]',' ',t)]
+        clean_tokens = [t for t in tokens if re.sub(r'[^\w\s]',' ',t)]
         return ' '.join(clean_tokens)
     else:
         return text
+
+def remove_punctuations(text):
+    '''
+    Filter out punctuations from the sentence
+    '''
+    return re.sub('[%s]' % re.escape(string.punctuation), '', text)
 
 def remove_non_ascii(text):
     '''
@@ -104,7 +111,7 @@ def remove_non_ascii(text):
 
 def remove_empty(df, columnName):
     '''
-    Remove utterances which have become empty after applying all preprocessing functions
+    Remove sentences which have become empty after applying all preprocessing functions
     '''
     df[columnName].replace('', np.nan, inplace=True)
     df[columnName].replace(r'^\s*$', np.nan, inplace=True)
@@ -124,6 +131,7 @@ def preprocess(df, columnName):
     df[columnName] = df[columnName].apply(to_lowerCase)
     df[columnName] = df[columnName].apply(process_URLs)
     df[columnName] = df[columnName].apply(filter_alpha_numeric)
+    df[columnName] = df[columnName].apply(remove_punctuations)
     df[columnName] = df[columnName].apply(remove_non_ascii)
     df[columnName] = df[columnName].apply(trim)
     df[columnName] = df[columnName].apply(strip_whiteSpaces)

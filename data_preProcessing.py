@@ -137,9 +137,7 @@ def preprocess(df, columnName):
 
 if __name__ == "__main__":
     data = sys.argv[1]
-    print(data.split('.')[0])
     df  = pd.read_excel(data)
     df = preprocess(df, 'text')
-    df = preprocess(df, 'annotation')
     df.to_excel(data.split('.')[0]+"_preprocessed.xlsx", index=False)
 ###################### END ###############################

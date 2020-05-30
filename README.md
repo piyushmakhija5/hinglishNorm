@@ -5,7 +5,7 @@ data processing data for Normalization Dataset
 
 We are releasing our dataset for Normalization of Hindi-English Code-Mixed Text Data in JSON format
 
-The object/fields in released JSON format dataset are as shown in Table
+The object/fields in the released dataset are as shown in Table
 
 | Field  | Description | Example |
 | :----: |:-----------:| :-----: |

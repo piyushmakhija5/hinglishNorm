@@ -27,10 +27,10 @@ pd.options.display.float_format = "{:,.2f}".format
 def getComparisonStats(df):
     statList = []
 
-    # Number of Utterances in Dataset
+    # Number of Sentences in Dataset
     statList.append(['#sentences', len(df.text), len(df.annotation)])
 
-    # Number of Unique Utterances in Dataset
+    # Number of Unique Sentences in Dataset
     statList.append(['#uniqueSentences', df.text.nunique(), df.annotation.nunique()])
 
     # Number of Unique Words in Dataset
@@ -38,38 +38,38 @@ def getComparisonStats(df):
                     len(set(itertools.chain(*[str.split(x) for x in list(df.annotation)])))])
 
     # Number of Unique Characters in Dataset
-    utteranceList = list(df.text)
+    textList = list(df.text)
     annotatedList = list(df.annotation)
-    statList.append(['#uniqueChars', len(set(itertools.chain(*[list(x) for x in utteranceList]))),
+    statList.append(['#uniqueChars', len(set(itertools.chain(*[list(x) for x in textList]))),
                     len(set(itertools.chain(*[list(x) for x in annotatedList])))])
 
-    # Most Common Utterance in Dataset
-    statList.append(['mostCommonSentence', df.text.value_counts().argmax(),
-                    df.annotation.value_counts().argmax()])
+    # Most Common Sentence in Dataset
+    statList.append(['mostCommonSentence', str(df.text.value_counts().argmax()),
+                    str(df.annotation.value_counts().argmax())])
 
-    # Number of Instances for Most Common Utterances in Dataset
+    # Number of Instances for Most Common Sentences in Dataset
     statList.append(['# instances of mostCommonSentence', df.text.value_counts().max(),
                     df.annotation.value_counts().max()])
 
-    # Mean Character Length of Utterances in Dataset
+    # Mean Character Length of Sentences in Dataset
     statList.append(['meanCharLength', df.text.str.len().mean(), df.annotation.str.len().mean()])
 
-    # Standard Deviation of Characters for Utterances in Dataset
+    # Standard Deviation of Characters for Sentences in Dataset
     statList.append(['stdCharLength', df.text.str.len().std(), df.annotation.str.len().std()])
 
-    # Median Character Length of Utterances in Dataset
+    # Median Character Length of Sentences in Dataset
     statList.append(['medianCharLength', df.text.str.len().median(),
                     df.annotation.str.len().median()])
 
-    # Mean Word Length of Utterances in Dataset
+    # Mean Word Length of Sentences in Dataset
     statList.append(['meanWordLength', df.text.str.split().str.len().mean(),
                     df.annotation.str.split().str.len().mean()])
 
-    # Standard Deviation of Words for Utterances in Dataset
+    # Standard Deviation of Words for Sentences in Dataset
     statList.append(['stdWordLength', df.text.str.split().str.len().std(),
                     df.annotation.str.split().str.len().std()])
 
-    # Median Character Length of Utterances in Dataset
+    # Median Character Length of Sentences in Dataset
     statList.append(['medianWordLength', df.text.str.split().str.len().median(),
                     df.annotation.str.split().str.len().median()])
 

@@ -1,5 +1,5 @@
 # normalizationDataset
-[higlishNormdata](https://github.com/piyushmakhija5/normalizationDataset/blob/master/hinglishNorm.json): A Hindi-English Dataset for Text Normalization
+[hinglishNorm](https://github.com/piyushmakhija5/normalizationDataset/blob/master/hinglishNorm.json): A Hindi-English Dataset for Text Normalization
 
 ## Dataset
 

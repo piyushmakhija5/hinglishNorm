@@ -5,7 +5,7 @@
 
 We are releasing our dataset for Normalization of Hindi-English Code-Mixed Text Data in JSON format.
 
-The object/fields in the released dataset are as shown in Table below:
+The object/fields in the released dataset are as shown in the following table:
 
 | Field  | Description | Example |
 | :----: |:-----------:| :-----: |

@@ -12,4 +12,4 @@ The object/fields in the released dataset are as shown in Table
 | id     | Unique identifier for each datapoint | 30 |
 | Text   | Filtered & cleaned but unnormalized version of user’s input text | whtas ur name |
 | Annotation | Manually annotated normalized version of Text | what is your name |
-| Transformation | Transformations applied to text field which results in annotation field | ['Short Form', 'Short Form', 'Looks Good'] |
+| Transformation | Transformations applied to 'text' which result in 'annotation' | ['Short Form', 'Short Form', 'Looks Good'] |

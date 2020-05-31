@@ -9,21 +9,27 @@ from collections import Counter
 pd.options.display.float_format = "{:,.2f}".format
 
 
-################## Pre-Process Functions #######################
+################## Helper Functions #######################
 
-# def computeCMI(data, columnName):
-#     text = data[columnName]
-#     lang = data['transformation']
-#     lang = ast.literal_eval(lang)
-#     twords = len(text.split(' '))  # total words in a sentences
-#     maxWordInAnyLanguage = Counter(lang).most_common(1)[0][1]
-#     cmi = round(100*(maxWordInAnyLanguage/twords),2)
-#     return cmi
+def convertLanguage(transformation):
+    li = []
+    for lang in transformation:
+        if lang != "Hindi":
+            li.append("English")
+        else:
+            li.append(lang)
+    return li
+
+def computeCMI(transformation):
+    twords = len(transformation)  # total words in a sentences
+    maxWordInAnyLanguage = Counter(transformation).most_common(1)[0][1]
+    cmi = round(100*(maxWordInAnyLanguage/twords),2)
+    return cmi
 
 ############################ END ###############################
 
 
-############################## Evaluate text vs annotation Statistics #################################
+########## Evaluate text vs annotation Statistics ##############
 def getComparisonStats(df):
     statList = []
 
@@ -79,14 +85,12 @@ def getComparisonStats(df):
 
 def getBasicStats(df):
     df.transformation = df.transformation.apply(ast.literal_eval)
+    df.language = df.transformation.apply(convertLanguage)
+    df['cmi'] = df.transformation.apply(computeCMI)
     print(f"Percentage of sentences where text != annotation: {100.0 * (df.text != df.annotation).mean():0.2f} %")
     print(f"Percentage of sentences with Hindi Words: {100.0 * df.transformation.apply(lambda row: 'Hindi' in row).mean():0.2f} %")
     print(f"Percentage of Hindi Words in Corpus: {df.transformation.apply(lambda row: (100.0 * row.count('Hindi')/len(row))).mean():0.2f} %")
-
-    # CMI
-    # df['cmi_text'] = computeCMI(df,'text')
-    # df['cmi_annotation'] = computeCMI(df,'annotation')
-    # statList.append(['cmi', df.cmi_text.mean(),df.cmi_annotation.mean()])
+    print(f"Average CMI : {df.cmi.mean():0.2f}")
 
 
 ####################################### END ########################################
@@ -98,8 +102,11 @@ if __name__ == "__main__":
     # Read data from command line
     data = sys.argv[1]
     df = pd.read_excel(data)
+
     # Evaluate Dataset statistics
     df_stats = getComparisonStats(df)
+
+    #Print Results
     getBasicStats(df)
     print(df_stats)
 

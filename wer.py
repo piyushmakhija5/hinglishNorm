@@ -69,7 +69,7 @@ def getStepList(r, h, d):
 
 def wer(r, h):
     """
-    This is a function that calculate the word error rate in ASR.
+    This is a function that calculate the word error rate in MT/ASR.
     You can use it like this: wer("what is it".split(), "what is".split()) 
     """
     # build the matrix

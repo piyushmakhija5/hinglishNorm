@@ -4,6 +4,7 @@ import re
 import sys
 import string
 import enchant
+import json
 
 # INDIC-TRANSLITERATION
 from indic_transliteration import detect
@@ -137,6 +138,7 @@ def preprocess(df, columnName):
     df[columnName] = df[columnName].apply(strip_whiteSpaces)
     df = remove_empty(df, columnName)
     df = df.reset_index(drop=True)
+    print("Processing  Complete !!")
     return df
 
 ############################ END ###############################
@@ -146,9 +148,12 @@ def preprocess(df, columnName):
 if __name__ == "__main__":
     # Read data from command line
     data = sys.argv[1]
-    df  = pd.read_excel(data)
+    with open(data) as f:
+	    json_data = json.load(f)
+    df = pd.json_normalize(json_data)
+    df = df.reindex(columns=list(json_data[0].keys()))
     # Preprocess Dataset
     df = preprocess(df, 'text')
-    df.to_excel(data.split('.')[0]+"_preprocessed.xlsx", index=False)
+    df.to_json(data.split('.')[0]+"_preprocessed.json", orient='records')
 
 ###################### END ###############################

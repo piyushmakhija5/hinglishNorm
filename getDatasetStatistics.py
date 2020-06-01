@@ -6,8 +6,9 @@ import itertools
 import sys
 import ast
 from collections import Counter
-pd.options.display.float_format = "{:,.2f}".format
+import json
 
+pd.options.display.float_format = "{:,.2f}".format
 
 ################## Helper Functions #######################
 
@@ -50,8 +51,8 @@ def getComparisonStats(df):
                     len(set(itertools.chain(*[list(x) for x in annotatedList])))])
 
     # Most Common Sentence in Dataset
-    statList.append(['mostCommonSentence', str(df.text.value_counts().argmax()),
-                    str(df.annotation.value_counts().argmax())])
+    statList.append(['mostCommonSentence', str((df.text.value_counts().keys()[0])),
+                    str(df.annotation.value_counts().keys()[0])])
 
     # Number of Instances for Most Common Sentences in Dataset
     statList.append(['# instances of mostCommonSentence', df.text.value_counts().max(),
@@ -85,7 +86,7 @@ def getComparisonStats(df):
 
 def getBasicStats(df):
     df.transformation = df.transformation.apply(ast.literal_eval)
-    df.language = df.transformation.apply(convertLanguage)
+    df['language'] = df.transformation.apply(convertLanguage)
     df['cmi'] = df.transformation.apply(computeCMI)
     print(f"Percentage of sentences where text != annotation: {100.0 * (df.text != df.annotation).mean():0.2f} %")
     print(f"Percentage of sentences with Hindi Words: {100.0 * df.transformation.apply(lambda row: 'Hindi' in row).mean():0.2f} %")
@@ -101,7 +102,10 @@ def getBasicStats(df):
 if __name__ == "__main__":
     # Read data from command line
     data = sys.argv[1]
-    df = pd.read_excel(data)
+    with open(data) as f:
+	    json_data = json.load(f)
+    df = pd.json_normalize(json_data)
+    df = df.reindex(columns=list(json_data[0].keys()))
 
     # Evaluate Dataset statistics
     df_stats = getComparisonStats(df)

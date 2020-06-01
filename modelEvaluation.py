@@ -5,6 +5,7 @@ import sys
 import numpy as np
 import pandas as pd
 import tqdm
+import json
 from computeWer import *
 from nlgeval import compute_metrics
 
@@ -20,16 +21,17 @@ def getWER(df, candidate, reference):
 			print(f'error on text: {index, row[candidate]}\n')
 	return np.mean(annotated_werList)
 
+def getMetrics(df, candidate, reference):
+	with open('ref1.txt','w') as ref:
+		for line in list(df.annotation):
+			ref.writelines(line+'\n')
 
-with open('ref1.txt','w') as ref:
-    for line in list(df.annotation):
-        ref.writelines(line+'\n')
-        
-with open('hyp.txt','w') as hyp:
-    for line in list(df.normalized):
-        hyp.writelines(line+'\n')
-        
-metrics_dict = compute_metrics(hypothesis='hyp.txt', references=['ref1.txt'])
+	with open('hyp.txt','w') as hyp:
+		for line in list(df.normalized):
+			hyp.writelines(line+'\n')
+
+	metrics_dict = compute_metrics(hypothesis='hyp.txt', references=['ref1.txt'])
+	return metrics_dict
 ############################ END ###############################
 
 
@@ -38,12 +40,15 @@ metrics_dict = compute_metrics(hypothesis='hyp.txt', references=['ref1.txt'])
 if __name__ == "__main__":
     # Read data from command line
     data = sys.argv[1]
-    df  = pd.read_json(data)
+    with open(data) as f:
+	    json_data = json.load(f)
+    df = pd.json_normalize(json_data)
+    df = df.reindex(columns=list(json_data[0].keys()))
 	# print(df.head())
-    
-	# Preprocess Dataset
+
+	# Extract Normalized Dataset's Performance Metrics
     print(getWER(df[:5], 'normalized', 'annotation'))
-	print(metrics_dict)
+    print(getMetrics(df[:5], 'normalized', 'annotation'))
 
 ###################### END ###############################
 

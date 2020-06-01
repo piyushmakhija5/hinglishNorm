@@ -2,7 +2,8 @@
 [hinglishNorm](https://github.com/piyushmakhija5/hinglishNorm/tree/master/dataset): A Hindi-English Dataset for Text Normalization
 
 ## License
-![License Image](https://github.com/piyushmakhija5/hinglishNorm/tree/master/license/by-nc-sa.png)
+![by-nc-sa](https://user-images.githubusercontent.com/6278238/83433933-2fd7c000-a457-11ea-956c-bfdb541cf41f.png)
+
 This work is licensed under the Creative Commons Attribution 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
 
 <!--

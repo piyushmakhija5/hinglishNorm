@@ -1,12 +1,20 @@
 # A Corpus of Hindi-English Code Mixed Sentences for Normalization
 [hinglishNorm](https://github.com/piyushmakhija5/hinglishNorm/tree/master/dataset): A Hindi-English Dataset for Text Normalization
 
-## Dataset
+## License
+![License Image](https://github.com/piyushmakhija5/hinglishNorm/tree/master/license/by-nc-sa.png)
+This work is licensed under the Creative Commons Attribution 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
 
+<!--
+## Citing the corpus
+If you use this corpus or its derivate resources for your research, kindly cite it as follows:
+Piyush Makhija, Ankit Kumar, Anuj Gupta. "hinglishNorm - A Corpus of Hindi-English Code Mixed Sentences for Normalization" -->
+
+
+## Dataset Description
 We are releasing our dataset for Normalization of Hindi-English Code-Mixed Text Data in JSON format.
 
 The object/fields in the released dataset are as shown in the following table:
-
 | Field  | Description | Example |
 | :----: |:-----------:| :-----: |
 | *id*    | Unique identifier for each datapoint | 30 |

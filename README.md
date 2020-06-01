@@ -1,4 +1,4 @@
-# normalizationDataset
+# A Corpus of Hindi-English Code Mixed Sentences for Normalization
 [hinglishNorm](https://github.com/piyushmakhija5/hinglishNorm/tree/master/dataset): A Hindi-English Dataset for Text Normalization
 
 ## Dataset

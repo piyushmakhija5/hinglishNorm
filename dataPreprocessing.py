@@ -124,7 +124,7 @@ def remove_empty(df, columnName):
 ######################## Driver Function #########################
 
 def preprocess(df, columnName):
-    if 'text' not in df.columns:
+    if 'inputText' not in df.columns:
         raise ValueError("text column not present in excel")
     print("Processing ..")
     print("Total length : -",len(df))
@@ -153,7 +153,7 @@ if __name__ == "__main__":
     df = pd.json_normalize(json_data)
     df = df.reindex(columns=list(json_data[0].keys()))
     # Preprocess Dataset
-    df = preprocess(df, 'text')
+    df = preprocess(df, 'inputText')
     df.to_json(data.split('.')[0]+"_preprocessed.json", orient='records')
 
 ###################### END ###############################

@@ -12,18 +12,18 @@ pd.options.display.float_format = "{:,.2f}".format
 
 ################## Helper Functions #######################
 
-def convertLanguage(transformation):
+def convertLanguage(tags):
     li = []
-    for lang in transformation:
+    for lang in tags:
         if lang != "Hindi":
             li.append("English")
         else:
             li.append(lang)
     return li
 
-def computeCMI(transformation):
-    twords = len(transformation)  # total words in a sentences
-    maxWordInAnyLanguage = Counter(transformation).most_common(1)[0][1]
+def computeCMI(tags):
+    twords = len(tags)  # total words in a sentences
+    maxWordInAnyLanguage = Counter(tags).most_common(1)[0][1]
     cmi = round(100*(maxWordInAnyLanguage/twords),2)
     return cmi
 
@@ -35,62 +35,62 @@ def getComparisonStats(df):
     statList = []
 
     # Number of Sentences in Dataset
-    statList.append(['#sentences', len(df.text), len(df.annotation)])
+    statList.append(['#sentences', len(df.inputText), len(df.normalizedText)])
 
     # Number of Unique Sentences in Dataset
-    statList.append(['#uniqueSentences', df.text.nunique(), df.annotation.nunique()])
+    statList.append(['#uniqueSentences', df.inputText.nunique(), df.normalizedText.nunique()])
 
     # Number of Unique Words in Dataset
-    statList.append(['#uniqueWords', len(set(itertools.chain(*[str.split(x) for x in list(df.text)]))),
-                    len(set(itertools.chain(*[str.split(x) for x in list(df.annotation)])))])
+    statList.append(['#uniqueWords', len(set(itertools.chain(*[str.split(x) for x in list(df.inputText)]))),
+                    len(set(itertools.chain(*[str.split(x) for x in list(df.normalizedText)])))])
 
     # Number of Unique Characters in Dataset
-    textList = list(df.text)
-    annotatedList = list(df.annotation)
+    textList = list(df.inputText)
+    annotatedList = list(df.normalizedText)
     statList.append(['#uniqueChars', len(set(itertools.chain(*[list(x) for x in textList]))),
                     len(set(itertools.chain(*[list(x) for x in annotatedList])))])
 
     # Most Common Sentence in Dataset
-    statList.append(['mostCommonSentence', str((df.text.value_counts().keys()[0])),
-                    str(df.annotation.value_counts().keys()[0])])
+    statList.append(['mostCommonSentence', str((df.inputText.value_counts().keys()[0])),
+                    str(df.normalizedText.value_counts().keys()[0])])
 
     # Number of Instances for Most Common Sentences in Dataset
-    statList.append(['# instances of mostCommonSentence', df.text.value_counts().max(),
-                    df.annotation.value_counts().max()])
+    statList.append(['# instances of mostCommonSentence', df.inputText.value_counts().max(),
+                    df.normalizedText.value_counts().max()])
 
     # Mean Character Length of Sentences in Dataset
-    statList.append(['meanCharLength', df.text.str.len().mean(), df.annotation.str.len().mean()])
+    statList.append(['meanCharLength', df.inputText.str.len().mean(), df.normalizedText.str.len().mean()])
 
     # Standard Deviation of Characters for Sentences in Dataset
-    statList.append(['stdCharLength', df.text.str.len().std(), df.annotation.str.len().std()])
+    statList.append(['stdCharLength', df.inputText.str.len().std(), df.normalizedText.str.len().std()])
 
     # Median Character Length of Sentences in Dataset
-    statList.append(['medianCharLength', df.text.str.len().median(),
-                    df.annotation.str.len().median()])
+    statList.append(['medianCharLength', df.inputText.str.len().median(),
+                    df.normalizedText.str.len().median()])
 
     # Mean Word Length of Sentences in Dataset
-    statList.append(['meanWordLength', df.text.str.split().str.len().mean(),
-                    df.annotation.str.split().str.len().mean()])
+    statList.append(['meanWordLength', df.inputText.str.split().str.len().mean(),
+                    df.normalizedText.str.split().str.len().mean()])
 
     # Standard Deviation of Words for Sentences in Dataset
-    statList.append(['stdWordLength', df.text.str.split().str.len().std(),
-                    df.annotation.str.split().str.len().std()])
+    statList.append(['stdWordLength', df.inputText.str.split().str.len().std(),
+                    df.normalizedText.str.split().str.len().std()])
 
     # Median Character Length of Sentences in Dataset
-    statList.append(['medianWordLength', df.text.str.split().str.len().median(),
-                    df.annotation.str.split().str.len().median()])
+    statList.append(['medianWordLength', df.inputText.str.split().str.len().median(),
+                    df.normalizedText.str.split().str.len().median()])
 
     df_stats = pd.DataFrame(data = statList, columns=['feature', 'text', 'annotation'])
     return df_stats
 
 
 def getBasicStats(df):
-    df.transformation = df.transformation.apply(ast.literal_eval)
-    df['language'] = df.transformation.apply(convertLanguage)
-    df['cmi'] = df.transformation.apply(computeCMI)
-    print(f"Percentage of sentences where text != annotation: {100.0 * (df.text != df.annotation).mean():0.2f} %")
-    print(f"Percentage of sentences with Hindi Words: {100.0 * df.transformation.apply(lambda row: 'Hindi' in row).mean():0.2f} %")
-    print(f"Percentage of Hindi Words in Corpus: {df.transformation.apply(lambda row: (100.0 * row.count('Hindi')/len(row))).mean():0.2f} %")
+    df.tags = df.tags.apply(ast.literal_eval)
+    df['language'] = df.tags.apply(convertLanguage)
+    df['cmi'] = df.tags.apply(computeCMI)
+    print(f"Percentage of sentences where text != annotation: {100.0 * (df.inputText != df.normalizedText).mean():0.2f} %")
+    print(f"Percentage of sentences with Hindi Words: {100.0 * df.tags.apply(lambda row: 'Hindi' in row).mean():0.2f} %")
+    print(f"Percentage of Hindi Words in Corpus: {df.tags.apply(lambda row: (100.0 * row.count('Hindi')/len(row))).mean():0.2f} %")
     print(f"Average CMI : {df.cmi.mean():0.2f}")
 
 

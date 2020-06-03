@@ -15,10 +15,12 @@ pd.options.display.float_format = "{:,.2f}".format
 def convertLanguage(tags):
     li = []
     for lang in tags:
-        if lang != "Hindi":
+        if lang == "Hindi":
+            li.append("Hindi")
+        elif lang != "Unrecognizable or other language":
             li.append("English")
         else:
-            li.append(lang)
+            li.append("Other")
     return li
 
 def computeCMI(tags):
@@ -80,7 +82,7 @@ def getComparisonStats(df):
     statList.append(['medianWordLength', df.inputText.str.split().str.len().median(),
                     df.normalizedText.str.split().str.len().median()])
 
-    df_stats = pd.DataFrame(data = statList, columns=['feature', 'text', 'annotation'])
+    df_stats = pd.DataFrame(data = statList, columns=['feature', 'inputText', 'normalizedText'])
     return df_stats
 
 
@@ -90,6 +92,7 @@ def getBasicStats(df):
     df['cmi'] = df.tags.apply(computeCMI)
     print(f"Percentage of sentences where text != annotation: {100.0 * (df.inputText != df.normalizedText).mean():0.2f} %")
     print(f"Percentage of sentences with Hindi Words: {100.0 * df.tags.apply(lambda row: 'Hindi' in row).mean():0.2f} %")
+    print(f"Percentage of non-English/Hindi Words in Corpus: {df.tags.apply(lambda row: (100.0 * row.count('Unrecognizable or other language')/len(row))).mean():0.2f} %")
     print(f"Percentage of Hindi Words in Corpus: {df.tags.apply(lambda row: (100.0 * row.count('Hindi')/len(row))).mean():0.2f} %")
     print(f"Average CMI : {df.cmi.mean():0.2f}")
 

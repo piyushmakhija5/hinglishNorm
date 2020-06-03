@@ -1,5 +1,5 @@
 # hinglishNorm - A Corpus of Hindi-English Code Mixed Sentences for Normalization
-[A Hindi-English Dataset for Text Normalization](https://github.com/piyushmakhija5/hinglishNorm/tree/master/dataset) 
+[A Hindi-English Code-Mixed Dataset for Text Normalization](https://github.com/piyushmakhija5/hinglishNorm/tree/master/dataset) 
 
 ## License
 ![by-nc-sa](https://user-images.githubusercontent.com/6278238/83433933-2fd7c000-a457-11ea-956c-bfdb541cf41f.png)

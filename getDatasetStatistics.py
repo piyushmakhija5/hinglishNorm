@@ -89,11 +89,11 @@ def getComparisonStats(df):
 def getBasicStats(df):
     df.tags = df.tags.apply(ast.literal_eval)
     df['language'] = df.tags.apply(convertLanguage)
-    df['cmi'] = df.tags.apply(computeCMI)
+    df['cmi'] = df.language.apply(computeCMI)
     print(f"Percentage of sentences where text != annotation: {100.0 * (df.inputText != df.normalizedText).mean():0.2f} %")
-    print(f"Percentage of sentences with Hindi Words: {100.0 * df.tags.apply(lambda row: 'Hindi' in row).mean():0.2f} %")
     print(f"Percentage of non-English/Hindi Words in Corpus: {df.tags.apply(lambda row: (100.0 * row.count('Unrecognizable or other language')/len(row))).mean():0.2f} %")
     print(f"Percentage of Hindi Words in Corpus: {df.tags.apply(lambda row: (100.0 * row.count('Hindi')/len(row))).mean():0.2f} %")
+    print(f"Percentage of sentences containing Hindi-English code-mixing: {100.0 * df.tags.apply(lambda row: 'Hindi' in row).mean():0.2f} %")
     print(f"Average CMI : {df.cmi.mean():0.2f}")
 
 

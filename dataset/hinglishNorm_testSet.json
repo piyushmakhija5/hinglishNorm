@@ -6247,9 +6247,9 @@
     },
     {
         "id": 5089,
-        "inputText": "no",
-        "normalizedText": "no",
-        "tags": "['Looks Good', 'Unrecognizable or other language']"
+        "inputText": "pakka lisenc nahin hai but ll hai",
+        "normalizedText": "pukka license nahi hai but learning licence hai",
+        "tags": "['Hindi', 'Typo', 'Hindi', 'Hindi', 'Looks Good', 'Acronym', 'Hindi']"
     },
     {
         "id": 5090,

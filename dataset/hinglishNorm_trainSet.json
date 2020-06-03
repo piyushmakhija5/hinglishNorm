@@ -26575,9 +26575,9 @@
     },
     {
         "id": 13427,
-        "inputText": "m26 here",
-        "normalizedText": "m26 here",
-        "tags": "['Looks Good', 'Looks Good']"
+        "inputText": "hiii mjhe jab chaiye",
+        "normalizedText": "hi mujhe job chaahie",
+        "tags": "['Wordplay', 'Hindi', 'Typo', 'Hindi']"
     },
     {
         "id": 5271,

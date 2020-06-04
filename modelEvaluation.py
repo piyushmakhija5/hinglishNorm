@@ -23,11 +23,11 @@ def getWER(df, candidate, reference):
 
 def getMetrics(df, candidate, reference):
 	with open('ref1.txt','w') as ref:
-		for line in list(df.annotation):
+		for line in list(reference):
 			ref.writelines(line+'\n')
 
 	with open('hyp.txt','w') as hyp:
-		for line in list(df.normalized):
+		for line in list(candidate):
 			hyp.writelines(line+'\n')
 
 	metrics_dict = compute_metrics(hypothesis='hyp.txt', references=['ref1.txt'])
@@ -47,8 +47,8 @@ if __name__ == "__main__":
 	# print(df.head())
 
 	# Extract Normalized Dataset's Performance Metrics
-    print(getWER(df[:5], 'normalized', 'annotation'))
-    print(getMetrics(df[:5], 'normalized', 'annotation'))
+    print(getWER(df[:5], 'normalizedText', 'modelNormalizedText'))
+    print(getMetrics(df[:5], 'modelNormalizedText', 'normalizedText'))
 
 ###################### END ###############################
 

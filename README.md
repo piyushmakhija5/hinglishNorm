@@ -21,5 +21,5 @@ The object/fields in the released dataset are as shown in the following table:
 | :----: |:-----------:| :-----: |
 | *id*    | Unique identifier for each datapoint | 30 |
 | *inputText*   | Filtered & cleaned input text | whtas ur name |
-| *normalizedText* | Manually annotated normalized *inputText* | what is your name |
 | *tags* | We get *normalizedText* from *inputText* after applying transformation according to the tags | ['Short Form', 'Short Form', 'Looks Good'] |
+| *normalizedText* | Manually annotated normalized *inputText* | what is your name |

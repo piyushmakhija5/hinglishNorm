@@ -4,10 +4,12 @@
 import sys
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import tqdm
 import json
 from computeWer import *
 from nlgeval import compute_metrics
+
 
 
 ################## Helper Functions #######################
@@ -32,6 +34,19 @@ def getMetrics(df, candidate, reference):
 
 	metrics_dict = compute_metrics(hypothesis='hyp.txt', references=['ref1.txt'])
 	return metrics_dict
+
+def getTagStats(df):
+	extracted_vals = []
+	for val in tqdm.tqdm(df.tags):
+		[extracted_vals.append(i) for i in val]
+	# print(extracted_vals)
+	tags_dist = {}
+	for i in set(extracted_vals):
+		tags_dist[i] = df.tags.apply(lambda row: (100.0 * row.count(i)/len(row))).mean().round(2)
+	print(tags_dist)
+	ax = plt.bar(*zip(*tags_dist.items()))
+	plt.gca().xaxis.set_tick_params(rotation=90)
+	plt.show()
 ############################ END ###############################
 
 

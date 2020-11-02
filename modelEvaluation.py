@@ -44,7 +44,7 @@ if __name__ == "__main__":
 	    json_data = json.load(f)
     df = pd.json_normalize(json_data)
     df = df.reindex(columns=list(json_data[0].keys()))
-	# print(df.head())
+	print(df.head())
 
 	# Extract Normalized Dataset's Performance Metrics
     print(getWER(df[:5], 'normalizedText', 'modelNormalizedText'))

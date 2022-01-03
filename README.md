@@ -1,6 +1,6 @@
 # hinglishNorm - A Corpus of Hindi-English Code Mixed Sentences for Normalization
-[A Hindi-English Code-Mixed Dataset for Text Normalization](https://github.com/piyushmakhija5/hinglishNorm/tree/master/dataset) 
-[Read about hinglishNorm Research here](https://arxiv.org/abs/2010.08974)
+- [A Hindi-English Code-Mixed Dataset for Text Normalization](https://github.com/piyushmakhija5/hinglishNorm/tree/master/dataset) 
+- [Read about hinglishNorm Research here](https://arxiv.org/abs/2010.08974)
 
 
 ## License
